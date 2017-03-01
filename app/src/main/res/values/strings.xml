@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">Quotes</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="banner_ad_unit_id">ca-app-pub-4318223458314026/8591145592</string>
+    <string name="Interstitial_ad_unit_id">ca-app-pub-4318223458314026/4749591591</string>
+
+
+    ca-app-pub-4318223458314026/4749591591
+    <string name="key_get_data">data</string>
+    <string name="key_get_error">error</string>
+    <string name="key_get_message">message</string>
+
+
+    <string name="fs_name">FlatStack</string>
+    <string name="core_values_subtitle">Ruby on Rails, iOS, Android development</string>
+    <string name="core_values_title">Our core values</string>
+    <string name="core_values">We believe that Flatstack is founded on the core values we share as humans
+        and partners in this company. These values represent what we want this company to stand for
+        and represent what we hold dear as a company.
+        \n\n1) Set People up to Succeed. Believe in Them.
+        \n2) Great Work is a Matter of Pride.
+        \n3) Doing more than Talking.
+        \n4) Be Curious &amp; Never Stop Learning.
+        \n5) Innovate. Make mistakes. Learn.
+        \n6) Flatten the World &amp; Explore it.
+        \n7) Communicate Transparently &amp; Honestly.
+        \n8) Work Hard. Play Hard.
+        \n9) Win, Win, Win - Customers, Employees, Company.
+        \n10) Create Awesomeness.
+        \n\nFlatstack is a diverse group of talented individuals working towards a common goal,
+        and these core values are the ties that bind us together as people and as colleagues.</string>
+    <string name="share">Share</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

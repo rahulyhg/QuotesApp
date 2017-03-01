@@ -1,0 +1,46 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+
+
+    <!--<style name="QTheme" parent="android:Theme.Light">-->
+        <!--<item name="android:windowBackground">@color/q_green</item>-->
+        <!--<item name="android:colorBackground">@color/q_green</item>-->
+        <!--<item name="android:textViewStyle">@style/QText</item>-->
+    <!--</style>-->
+
+    <!--<color name="q_green">#008000</color>-->
+    <!--<color name="white">#FFFFFF</color>-->
+
+    <!--<style name="category_text" parent="@android:style/TextAppearance.Medium">-->
+        <!--<item name="android:textSize">20sp</item>-->
+        <!--<item name="android:textColor">@color/q_green</item>-->
+        <!--<item name="android:textStyle">bold</item>-->
+        <!--<item name="android:typeface">sans</item>-->
+    <!--</style>-->
+
+
+
+</resources>
