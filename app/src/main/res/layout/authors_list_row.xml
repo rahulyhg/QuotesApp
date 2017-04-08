@@ -1,36 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+    <android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:focusable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:clickable="true"
-    android:background="?android:attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:layout_margin="6dp"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardElevation="4dp"
+    card_view:cardCornerRadius="3dp"
+    card_view:cardPreventCornerOverlap="false"
+    >
 
-    <TextView
-        android:id="@+id/author_name"
-        android:textColor="@color/title"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:orientation="vertical">
 
-    <TextView
+
+        <TextView
         android:id="@+id/author_description"
-        android:layout_below="@id/author_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/author_likes_count"
-        android:textColor="@color/year"
+        android:layout_below="@+id/author_name"
         android:layout_width="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/circleImageMFQ"
+        android:layout_toEndOf="@+id/circleImageMFQ"
+        android:text="author_description osdhfoishdf siudhfo sidfh sodifhs odifhs oidfhsoidfhos idfhosidf hosidfh osdf"
+        android:textAlignment="viewStart"
+        android:layout_marginLeft="20dp"
+        android:layout_toLeftOf="@+id/imgLike"
+        android:layout_toStartOf="@+id/imgLike"
 
-</RelativeLayout>
+
+        android:layout_marginTop="5dp" />
+
+
+        <TextView
+            android:id="@+id/author_likes_count"
+            android:textColor="@color/grey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="153"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="5dp" />
+
+
+        <com.mikepenz.iconics.view.IconicsImageView
+            android:id="@+id/imgLike"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:iiv_color="@color/grey"
+            app:iiv_icon="@string/gmd_thumb_up"
+            android:layout_centerVertical="true"
+
+            android:layout_toLeftOf="@+id/author_likes_count"/>
+
+        <TextView
+            android:id="@+id/author_name"
+            android:textColor="@color/title"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="author_name"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/author_description"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="@dimen/round_image_width_small"
+            android:layout_height="@dimen/round_image_width_small"
+            android:layout_gravity="center"
+            android:id="@+id/circleImageMFQ"
+            android:src="@drawable/fs_icon"
+            app:civ_border_width="2dp"
+            app:layout_behavior="sourabh.quotes.adaptor.IconImageBehavior"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
+

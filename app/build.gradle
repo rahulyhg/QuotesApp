@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
@@ -40,7 +41,19 @@ dependencies {
     compile 'com.tonicartos:superslim:0.4.13'
     compile 'com.android.support:support-v4:25.0.1'
     testCompile 'junit:junit:4.12'
+
+    compile "com.mikepenz:iconics-core:2.8.2@aar"
+    compile 'com.mikepenz:google-material-typeface:3.0.1.0.original@aar'
+    compile 'com.google.code.gson:gson:2.8.0'
+
+
+    compile 'me.gujun.android.taggroup:library:1.4@aar'
+    compile 'com.simplecityapps:recyclerview-fastscroll:1.0.14'
+
+
 }
+
+
 
 
 

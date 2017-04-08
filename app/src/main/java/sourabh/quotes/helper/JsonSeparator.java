@@ -2,7 +2,6 @@ package sourabh.quotes.helper;
 
 import android.content.Context;
 import sourabh.quotes.R;
-import sourabh.quotes.app.Const;
 import sourabh.quotes.data.AuthorQuotesItem;
 import sourabh.quotes.data.AuthorsItem;
 import sourabh.quotes.data.QuotesItem;
@@ -55,21 +54,21 @@ public class JsonSeparator {
             ArrayList<AuthorQuotesItem> authorQuotesItemArrayList = new ArrayList<>();
 
 
-            authorsItem.setId_author(single_quote.getString(Const.KEY_ID_AUTHOR));
+            authorsItem.setAuthor_id(single_quote.getString(Const.KEY_AUTHOR_ID));
             authorsItem.setAuthor_name(single_quote.getString(Const.KEY_AUTHOR_NAME));
             authorsItem.setAuthor_likes_count(single_quote.getString(Const.KEY_AUTHOR_LIKES_COUNT));
-            authorsItem.setCreated_on(single_quote.getString(Const.KEY_CREATED_ON));
+            authorsItem.setCreated_on(single_quote.getString(Const.KEY_CREATED_AT));
 
 
-            JSONArray quotesArr = single_quote.getJSONArray(Const.KEY_QUOTES);
+            JSONArray quotesArr = single_quote.getJSONArray(Const.KEY_AUTHOR_QUOTES);
 
             for (int j = 0; j < quotesArr.length(); j++)
             {
                 JSONObject author_quotes = quotesArr.getJSONObject(j);
 
 
-                authorQuotesItem.setId_quote(author_quotes.getString(Const.KEY_ID_QUOTE));
-                authorQuotesItem.setId_category(author_quotes.getString(Const.KEY_ID_CATEGORY));
+                authorQuotesItem.setQuote_id(author_quotes.getString(Const.KEY_QUOTE_ID));
+                authorQuotesItem.setCategory_id(author_quotes.getString(Const.KEY_CATEGORY_ID));
                 authorQuotesItem.setQuote(author_quotes.getString(Const.KEY_QUOTE));
                 authorQuotesItem.setQuote_likes_count(author_quotes.getString(Const.KEY_QUOTES_LIKES_COUNT));
                 authorQuotesItem.setQuote_created_on(author_quotes.getString(Const.KEY_QUOTE_CREATED_ON));

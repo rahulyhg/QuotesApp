@@ -1,6 +1,8 @@
 package sourabh.quotes;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,6 +14,9 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.mikepenz.iconics.context.IconicsLayoutInflater;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,60 +28,54 @@ import java.util.List;
 
 import sourabh.quotes.adaptor.AuthorsAdapter;
 import sourabh.quotes.adaptor.RecyclerTouchListener;
-import sourabh.quotes.app.Const;
+import sourabh.quotes.data.AuthorQuote;
+import sourabh.quotes.data.AuthorQuotes;
+import sourabh.quotes.helper.CommonUtilities;
+import sourabh.quotes.helper.Const;
 import sourabh.quotes.app.CustomRequest;
 import sourabh.quotes.data.AuthorsItem;
-import sourabh.quotes.data.Movie;
-import sourabh.quotes.helper.DividerItemDecoration;
 import sourabh.quotes.helper.JsonSeparator;
 
 public class AuthorsActivity extends AppCompatActivity {
     private List<AuthorsItem> authorsItemsList = new ArrayList<>();
-    private RecyclerView recyclerView;
+    private FastScrollRecyclerView recyclerView;
     private AuthorsAdapter mAdapter;
+    ArrayList<String>mDataArray = new ArrayList<>();
+
 Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LayoutInflaterCompat.setFactory(getLayoutInflater(), new IconicsLayoutInflater(getDelegate()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authors);
+        context=getApplicationContext();
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_author);
         setSupportActionBar(toolbar);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_authors);
+        recyclerView = (FastScrollRecyclerView) findViewById(R.id.recycler_view_authors);
 
-        mAdapter = new AuthorsAdapter(authorsItemsList);
 
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                AuthorsItem authorsItem = authorsItemsList.get(position);
-                Toast.makeText(getApplicationContext(), authorsItem.getAuthor_name() + " is selected!", Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onLongClick(View view, int position) {
+        mDataArray.add("A");
+        mDataArray.add("B");
 
-            }
-        }));
-context=getApplicationContext();
-        prepareMovieData();
+
+
+
+        getAuthors();
     }
 
-    private void prepareMovieData() {
+    private void getAuthors() {
         HashMap params = new HashMap();
         HashMap headers = new HashMap();
         headers.put("Authorization", Const.GUEST_API_KEY);
         String url = Const.URL_GET_AUTHORS ;
 
         System.out.println(url);
-        Volley.newRequestQueue(this).add(new CustomRequest(getApplicationContext(), this,
-                false, 0, url, params, headers,
+        Volley.newRequestQueue(this).add(new CustomRequest(this, this,
+                true, 0, url, params, headers,
 
 
                 new com.android.volley.Response.Listener() {
@@ -92,10 +91,10 @@ context=getApplicationContext();
                                 Toast.makeText(context, js.getMessage().toString(), Toast.LENGTH_LONG).show();
                             } else {
 
-                                JSONArray authors = js.getData().getJSONArray(Const.KEY_AUTHORS);
+                                //JSONArray authors = js.getData().getJSONArray(Const.KEY_AUTHORS);
 
                                 //Toast.makeText(context,quotes.toString(),Toast.LENGTH_LONG).show();
-                        ParseJsonToAuthors(authors);
+                                ParseJsonToAuthors(js.getData());
 
 
                             }
@@ -119,23 +118,44 @@ context=getApplicationContext();
 
     }
 
-    public void ParseJsonToAuthors(JSONArray authors) throws JSONException {
-        for (int i = 0; i < authors.length(); i++) {
-            JSONObject single_author = authors.getJSONObject(i);
+    public void ParseJsonToAuthors(JSONObject jsonObject) throws JSONException {
 
-            AuthorsItem authorsItem = new AuthorsItem();
+        AuthorQuotes authorQuotes = CommonUtilities.getObjectFromJson(jsonObject, AuthorQuotes.class);
 
 
-            authorsItem.setId_author(single_author.getString(Const.KEY_ID_AUTHOR));
-            authorsItem.setAuthor_name(single_author.getString(Const.KEY_AUTHOR_NAME));
-            authorsItem.setAuthor_description(single_author.getString(Const.KEY_AUTHOR_DESCRIPTION));
-            authorsItem.setAuthor_image(single_author.getString(Const.KEY_AUTHOR_IMAGE));
-            authorsItem.setAuthor_likes_count(single_author.getString(Const.KEY_AUTHOR_LIKES_COUNT));
-            authorsItem.setCreated_on(single_author.getString(Const.KEY_CREATED_ON));
-                authorsItemsList.add(authorsItem);
+        mAdapter = new AuthorsAdapter(authorQuotes,context);
 
-        }
+        setupRecycleView();
+
+    }
+
+    void setupRecycleView(){
+
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                AuthorsItem authorsItem = authorsItemsList.get(position);
+                Intent i = new Intent(AuthorsActivity.this, AuthorQuotesActivity.class);
+                i.putExtra("id_author",authorsItem.getAuthor_id()) ;  startActivity(i); }
+
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+
+
+
 
     }
 

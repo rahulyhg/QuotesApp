@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class AuthorsItem {
 
-    private String id_author;
+    private String author_id;
     private String author_name;
     private String author_description;
     private String author_image;
@@ -46,12 +46,12 @@ public class AuthorsItem {
 
     }
 
-    public String getId_author() {
-        return id_author;
+    public String getAuthor_id() {
+        return author_id;
     }
 
-    public void setId_author(String id_author) {
-        this.id_author = id_author;
+    public void setAuthor_id(String author_id) {
+        this.author_id = author_id;
     }
 
     public String getAuthor_name() {

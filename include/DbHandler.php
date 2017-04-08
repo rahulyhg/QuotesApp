@@ -296,7 +296,7 @@ class DbHandler {
     
     
     while ($row_notes = $result->fetch_assoc()) {
-        $note_array['id_quote']=$row_notes['id_quote'];
+        $note_array['quote_id']=$row_notes['quote_id'];
         $note_array['quote']=$row_notes['quote'];
         
         array_push($user_array['notes'],$note_array);
@@ -350,7 +350,7 @@ return $usersList_array;
 //                if(($temp_auther['id_auther']) == $record['id_auther']){
 //                    
 //                    
-//                    $temp_quote['id_quote'] = $record['id_quote'];
+//                    $temp_quote['quote_id'] = $record['quote_id'];
 //                    $temp_quote['quote'] = $record['quote'];
 //                    $temp_quote['quote_likes_count'] = $record['quote_likes_count'];
 //                    $temp_quote['quote_created_on'] = $record['quote_created_on'];
@@ -368,7 +368,7 @@ return $usersList_array;
 //
 //                  
 //                    
-//                    $temp_quote['id_quote'] = $record['id_quote'];
+//                    $temp_quote['quote_id'] = $record['quote_id'];
 //                    $temp_quote['quote'] = $record['quote'];
 //                    $temp_quote['quote_likes_count'] = $record['quote_likes_count'];
 //                    $temp_quote['quote_created_on'] = $record['quote_created_on'];
@@ -396,11 +396,11 @@ return $usersList_array;
      //   $stmt->bind_param("ii", $task_id, $user_id);
 //        if ($stmt->execute()) {
 ////            $res = array();
-////            $stmt->bind_result($id_quote, $id_auther, $quote, $quote_likes_count, $quote_created_on);
+////            $stmt->bind_result($quote_id, $id_auther, $quote, $quote_likes_count, $quote_created_on);
 ////            // TODO
 ////            // $task = $stmt->get_result()->fetch_assoc();
 ////            $stmt->fetch();
-////            $res["id_quote"] = $id_quote;
+////            $res["quote_id"] = $quote_id;
 ////            $res["id_auther"] = $id_auther;
 ////            $res["quote"] = $quote;
 ////            $res["quote_likes_count"] = $quote_likes_count;

@@ -11,27 +11,31 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
+import me.gujun.android.taggroup.TagGroup;
 import sourabh.quotes.R;
+import sourabh.quotes.data.AuthorQuote;
+import sourabh.quotes.data.Quote;
+import sourabh.quotes.data.Tag;
 import sourabh.quotes.helper.Util;
 
-import static sourabh.quotes.R.id.card;
 import static sourabh.quotes.R.id.fab_author;
 import static sourabh.quotes.R.id.tv_author;
 
 public class AuthorQuotesDataAdapter extends RecyclerView.Adapter<AuthorQuotesDataAdapter.ViewHolder> {
-    private ArrayList<String> quotes;
+    private AuthorQuote authorQuotes;
     private String author;
     CardView cardView;
     Context context;
     FloatingActionButton fab_author;
+    TagGroup mTagGroup;
 
 
-    public AuthorQuotesDataAdapter(ArrayList<String> quotes, String author, Context context) {
-        this.quotes = quotes;
-        this.author = author;
 
+    public AuthorQuotesDataAdapter(AuthorQuote authorQuotes,Context context) {
+        this.authorQuotes = authorQuotes;
         this.context = context;
     }
 
@@ -44,21 +48,33 @@ public class AuthorQuotesDataAdapter extends RecyclerView.Adapter<AuthorQuotesDa
     @Override
     public void onBindViewHolder(AuthorQuotesDataAdapter.ViewHolder viewHolder, int i) {
 
-        viewHolder.tv_quote.setText(quotes.get(i));
-        viewHolder.tv_author.setText("- "+author);
+        Quote quote = authorQuotes.getQuotes().get(i);
+        viewHolder.tv_quote.setText(quote.getQuote());
+        viewHolder.tv_author.setText("- "+authorQuotes.getAuthor_name());
 
         int cardviewColor = Util.getRandomColor(context);
         cardView.setBackgroundColor(cardviewColor);
 
         viewHolder.tv_quote.setTextColor(Util.getContrastColor(cardviewColor));
         viewHolder.tv_author.setTextColor(Util.getContrastColor(cardviewColor));
-fab_author.setBackgroundTintList(ColorStateList.valueOf(cardviewColor));
+        fab_author.setBackgroundTintList(ColorStateList.valueOf(cardviewColor));
         fab_author.getDrawable().mutate().setTint(Util.getContrastColor(cardviewColor));
+
+
+        List<String> tags = new ArrayList<>();
+        for (Tag tag:quote.getTags())
+        {
+            tags.add(tag.getTag_title());
+        }
+        mTagGroup.setTags(tags);
+
+
+
     }
 
     @Override
     public int getItemCount() {
-        return quotes.size();
+        return authorQuotes.getQuotes().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -70,6 +86,7 @@ fab_author.setBackgroundTintList(ColorStateList.valueOf(cardviewColor));
             tv_author = (TextView)view.findViewById(R.id.tv_author);
             cardView = (CardView)view.findViewById(R.id.card);
             fab_author = (FloatingActionButton) view.findViewById(R.id.fab_author);
+            mTagGroup = (TagGroup)view.findViewById(R.id.tag_group);
 
         }
     }

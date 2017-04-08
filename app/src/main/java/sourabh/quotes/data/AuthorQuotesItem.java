@@ -1,28 +1,26 @@
 package sourabh.quotes.data;
 
-import java.util.ArrayList;
-
 /**
  * Created by Kajo on 2/2/2017.
  */
 
 public class AuthorQuotesItem
 {
-    private String id_category;
+    private String category_id;
     private String quote_likes_count;
     private String quote_created_on;
-    private String id_quote;
+    private String quote_id;
     private String category_name;
     private String quote;
 
 
 
-    public String getId_category() {
-        return id_category;
+    public String getCategory_id() {
+        return category_id;
     }
 
-    public void setId_category(String id_category) {
-        this.id_category = id_category;
+    public void setCategory_id(String category_id) {
+        this.category_id = category_id;
     }
 
     public String getQuote_likes_count() {
@@ -41,12 +39,12 @@ public class AuthorQuotesItem
         this.quote_created_on = quote_created_on;
     }
 
-    public String getId_quote() {
-        return id_quote;
+    public String getQuote_id() {
+        return quote_id;
     }
 
-    public void setId_quote(String id_quote) {
-        this.id_quote = id_quote;
+    public void setQuote_id(String quote_id) {
+        this.quote_id = quote_id;
     }
 
     public String getCategory_name() {

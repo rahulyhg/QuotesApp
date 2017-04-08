@@ -26,7 +26,7 @@ import java.util.List;
 
 import sourabh.quotes.adaptor.AuthorsAdapter;
 import sourabh.quotes.adaptor.RecyclerTouchListener;
-import sourabh.quotes.app.Const;
+import sourabh.quotes.helper.Const;
 import sourabh.quotes.app.CustomRequest;
 import sourabh.quotes.data.AuthorsItem;
 import sourabh.quotes.helper.DividerItemDecoration;
@@ -126,12 +126,12 @@ public class AuthorsFragment extends Fragment {
             AuthorsItem authorsItem = new AuthorsItem();
 
 
-            authorsItem.setId_author(single_author.getString(Const.KEY_ID_AUTHOR));
+            authorsItem.setAuthor_id(single_author.getString(Const.KEY_AUTHOR_ID));
             authorsItem.setAuthor_name(single_author.getString(Const.KEY_AUTHOR_NAME));
             authorsItem.setAuthor_description(single_author.getString(Const.KEY_AUTHOR_DESCRIPTION));
             authorsItem.setAuthor_image(single_author.getString(Const.KEY_AUTHOR_IMAGE));
             authorsItem.setAuthor_likes_count(single_author.getString(Const.KEY_AUTHOR_LIKES_COUNT));
-            authorsItem.setCreated_on(single_author.getString(Const.KEY_CREATED_ON));
+            authorsItem.setCreated_on(single_author.getString(Const.KEY_CREATED_AT));
             authorsItemsList.add(authorsItem);
 
         }
@@ -147,7 +147,7 @@ public class AuthorsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_authors, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_authors);
 
-        mAdapter = new AuthorsAdapter(authorsItemsList);
+       // mAdapter = new AuthorsAdapter(authorsItemsList,context);
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -161,7 +161,7 @@ public class AuthorsFragment extends Fragment {
             public void onClick(View view, int position) {
                 AuthorsItem authorsItem = authorsItemsList.get(position);
                                     Intent i = new Intent(getActivity(), AuthorQuotesActivity.class);
-                 i.putExtra("id_author",authorsItem.getId_author()) ;  startActivity(i); }
+                 i.putExtra("id_author",authorsItem.getAuthor_id()) ;  startActivity(i); }
 
             @Override
             public void onLongClick(View view, int position) {

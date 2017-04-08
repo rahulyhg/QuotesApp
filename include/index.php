@@ -662,7 +662,7 @@ $app->get('/tasks', 'authenticate', function() {
                 $tmp["id"] = $task["id"];
                 $tmp["task"] = $task["task"];
                 $tmp["status"] = $task["status"];
-                $tmp["createdAt"] = $task["created_at"];
+                $tmp["created_at"] = $task["created_at"];
                 array_push($response["tasks"], $tmp);
             }
 
@@ -711,7 +711,7 @@ $app->get('/tasks/:id', 'authenticate', function($task_id) {
                 $response["id"] = $result["id"];
                 $response["task"] = $result["task"];
                 $response["status"] = $result["status"];
-                $response["createdAt"] = $result["created_at"];
+                $response["created_at"] = $result["created_at"];
                 echoRespnse(200, $response);
             } else {
                 $response["error"] = true;

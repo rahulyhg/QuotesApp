@@ -6,7 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="sourabh.quotes.AuthorsActivity">       <android.support.v7.widget.Toolbar
+    tools:context="sourabh.quotes.AuthorsActivity"
+    android:background="@drawable/background_repeating">
+
+    <android.support.v7.widget.Toolbar
     android:id="@+id/toolbar_author"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
@@ -19,8 +22,22 @@
         <!--android:id="@+id/recycler_view_authors"-->
         <!--android:scrollbars="vertical"-->
         <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
         <!--android:layout_below="@+id/toolbar_author"-->
         <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentStart="true" />-->
+        <!--android:layout_alignParentStart="true" -->
+        <!--/>-->
+
+    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+        android:id="@+id/recycler_view_authors"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_author"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        app:fastScrollPopupBgColor="@color/colorAccent"
+        app:fastScrollPopupTextColor="@android:color/primary_text_dark"
+        app:fastScrollThumbColor="@color/colorAccent" />
+
+
 </RelativeLayout>

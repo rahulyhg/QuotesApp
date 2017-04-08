@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,16 +24,16 @@ import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 import sourabh.quotes.adaptor.AuthorQuotesDataAdapter;
-import sourabh.quotes.app.Const;
+import sourabh.quotes.data.AuthorQuote;
+import sourabh.quotes.data.AuthorQuotes;
+import sourabh.quotes.helper.CommonUtilities;
+import sourabh.quotes.helper.Const;
 import sourabh.quotes.app.CustomRequest;
-import sourabh.quotes.data.AuthorsItem;
-import sourabh.quotes.data.AuthorQuotesItem;
-import sourabh.quotes.data.QuotesItem;
 import sourabh.quotes.helper.JsonSeparator;
 import sourabh.quotes.helper.Util;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.ads.AdListener;
@@ -42,14 +41,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import static sourabh.quotes.R.id.circleImage;
-import static sourabh.quotes.R.id.imageView;
-import static sourabh.quotes.R.id.upper_imageview_author;
-import static sourabh.quotes.helper.Util.getRandomColor;
 
 
 public class AuthorQuotesActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
@@ -80,7 +73,7 @@ public class AuthorQuotesActivity extends AppCompatActivity implements AppBarLay
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.circleImage)
+    @Bind(R.id.circleImageMFQ)
     de.hdodenhof.circleimageview.CircleImageView circleImageView;
 
     @Bind(R.id.upper_imageview_author)
@@ -163,7 +156,7 @@ public class AuthorQuotesActivity extends AppCompatActivity implements AppBarLay
 
         System.out.println(url);
         Volley.newRequestQueue(this).add(new CustomRequest(getApplicationContext(), this,
-                false, 0, url, params, headers,
+                false, Request.Method.GET, url, params, headers,
 
 
                 new com.android.volley.Response.Listener() {
@@ -179,10 +172,12 @@ public class AuthorQuotesActivity extends AppCompatActivity implements AppBarLay
                                 Toast.makeText(context, js.getMessage().toString(), Toast.LENGTH_LONG).show();
                             } else {
 
-                                JSONArray quotes = js.getData().getJSONArray(Const.KEY_QUOTES);
+//                                JSONArray quotes = js.getData();//.getJSONArray(Const.KEY_AUTHOR_QUOTES);
 
                                 //Toast.makeText(context,quotes.toString(),Toast.LENGTH_LONG).show();
-                                JsonToQuotes(quotes);
+//                                JsonToQuotes(quotes);
+                                parseJson(js.getData());
+
 
 
                             }
@@ -206,69 +201,135 @@ public class AuthorQuotesActivity extends AppCompatActivity implements AppBarLay
 
     }
 
-    void JsonToQuotes(JSONArray quotes) throws JSONException {
+    void parseJson(JSONObject jsonObject){
 
 
-        ArrayList<QuotesItem> quotesItemArrayList = new ArrayList<>();
-        QuotesItem quotesItem = new QuotesItem();
-        ArrayList<AuthorsItem> authorsItemArray = new ArrayList<>();
+        AuthorQuotes authorQuotes = CommonUtilities.getObjectFromJson(jsonObject, AuthorQuotes.class);
+
+        AuthorQuote authorQuote = authorQuotes.getAuthor_quotes()
+                .get(0);
+
+        author = authorQuote.getAuthor_name();
+        tv_author_name.setText(author);
+        tv_author_description.setText(authorQuote.getAuthor_description());
+        title.setText(author);
+        author_image_url = authorQuote.getAuthor_image();
+
+        Picasso.with(context).load(author_image_url).into(circleImageView);
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.card_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
 
 
-        for (int i = 0; i < quotes.length(); i++) {
-            JSONObject single_quote = quotes.getJSONObject(i);
-
-            AuthorsItem authorsItem = new AuthorsItem();
-            AuthorQuotesItem authorQuotesItem = new AuthorQuotesItem();
-            ArrayList<AuthorQuotesItem> authorQuotesItemArrayList = new ArrayList<>();
+        RecyclerView.Adapter adapter = new AuthorQuotesDataAdapter(authorQuote, getApplicationContext());
+        recyclerView.setAdapter(adapter);
 
 
-            authorsItem.setId_author(single_quote.getString(Const.KEY_ID_AUTHOR));
-            authorsItem.setAuthor_name(single_quote.getString(Const.KEY_AUTHOR_NAME));
-            authorsItem.setAuthor_description(single_quote.getString(Const.KEY_AUTHOR_DESCRIPTION));
-            authorsItem.setAuthor_image(single_quote.getString(Const.KEY_AUTHOR_IMAGE));
-            authorsItem.setAuthor_likes_count(single_quote.getString(Const.KEY_AUTHOR_LIKES_COUNT));
-            authorsItem.setCreated_on(single_quote.getString(Const.KEY_CREATED_ON));
 
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            GestureDetector gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
 
-            author = authorsItem.getAuthor_name();
-            tv_author_name.setText(author);
-            tv_author_description.setText(authorsItem.getAuthor_description());
-            title.setText(author);
-            author_image_url = authorsItem.getAuthor_image();
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
 
-            JSONArray quotesArr = single_quote.getJSONArray(Const.KEY_QUOTES);
+            });
 
-            for (int j = 0; j < quotesArr.length(); j++) {
-                JSONObject author_quotes = quotesArr.getJSONObject(j);
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
 
+                View child = rv.findChildViewUnder(e.getX(), e.getY());
+                if (child != null && gestureDetector.onTouchEvent(e)) {
+                    int position = rv.getChildAdapterPosition(child);
+                    Toast.makeText(getApplicationContext(), quotesArray.get(position), Toast.LENGTH_SHORT).show();
+                }
 
-                authorQuotesItem.setId_quote(author_quotes.getString(Const.KEY_ID_QUOTE));
-                authorQuotesItem.setId_category(author_quotes.getString(Const.KEY_ID_CATEGORY));
-                authorQuotesItem.setQuote(author_quotes.getString(Const.KEY_QUOTE));
-                authorQuotesItem.setQuote_likes_count(author_quotes.getString(Const.KEY_QUOTES_LIKES_COUNT));
-                authorQuotesItem.setQuote_created_on(author_quotes.getString(Const.KEY_QUOTE_CREATED_ON));
-                authorQuotesItem.setCategory_name(author_quotes.getString(Const.KEY_CATEGORY_NAME));
+                return false;
+            }
 
-
-                authorQuotesItemArrayList.add(authorQuotesItem);
-
-                quotesArray.add(authorQuotesItem.getQuote());
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
 
             }
 
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
-            authorsItem.setAuthorQuotesItemArrayList(authorQuotesItemArrayList);
-
-            authorsItemArray.add(authorsItem);
-
-            quotesItem.setAuthorsItems(authorsItemArray);
-
-            initViews(author);
-
-        }
-
-
+            }
+        });
     }
+
+
+
+
+
+
+//    void JsonToQuotes(JSONArray quotes) throws JSONException {
+//
+//
+//        ArrayList<QuotesItem> quotesItemArrayList = new ArrayList<>();
+//        QuotesItem quotesItem = new QuotesItem();
+//        ArrayList<AuthorsItem> authorsItemArray = new ArrayList<>();
+//
+//
+//        for (int i = 0; i < quotes.length(); i++) {
+//            JSONObject single_quote = quotes.getJSONObject(i);
+//
+//            AuthorsItem authorsItem = new AuthorsItem();
+//            AuthorQuotesItem authorQuotesItem = new AuthorQuotesItem();
+//            ArrayList<AuthorQuotesItem> authorQuotesItemArrayList = new ArrayList<>();
+//
+//
+//            authorsItem.setAuthor_id(single_quote.getString(Const.KEY_AUTHOR_ID));
+//            authorsItem.setAuthor_name(single_quote.getString(Const.KEY_AUTHOR_NAME));
+//            authorsItem.setAuthor_description(single_quote.getString(Const.KEY_AUTHOR_DESCRIPTION));
+//            authorsItem.setAuthor_image(single_quote.getString(Const.KEY_AUTHOR_IMAGE));
+//            authorsItem.setAuthor_likes_count(single_quote.getString(Const.KEY_AUTHOR_LIKES_COUNT));
+//            authorsItem.setCreated_on(single_quote.getString(Const.KEY_CREATED_AT));
+//
+//
+//            author = authorsItem.getAuthor_name();
+//            tv_author_name.setText(author);
+//            tv_author_description.setText(authorsItem.getAuthor_description());
+//            title.setText(author);
+//            author_image_url = authorsItem.getAuthor_image();
+//
+//            JSONArray quotesArr = single_quote.getJSONArray(Const.KEY_AUTHOR_QUOTES);
+//
+//            for (int j = 0; j < quotesArr.length(); j++) {
+//                JSONObject author_quotes = quotesArr.getJSONObject(j);
+//
+//
+//                authorQuotesItem.setQuote_id(author_quotes.getString(Const.KEY_QUOTE_ID));
+//                authorQuotesItem.setCategory_id(author_quotes.getString(Const.KEY_CATEGORY_ID));
+//                authorQuotesItem.setQuote(author_quotes.getString(Const.KEY_QUOTE));
+//                authorQuotesItem.setQuote_likes_count(author_quotes.getString(Const.KEY_QUOTES_LIKES_COUNT));
+//                authorQuotesItem.setQuote_created_on(author_quotes.getString(Const.KEY_CREATED_AT));
+//                authorQuotesItem.setCategory_name(author_quotes.getString(Const.KEY_CATEGORY_NAME));
+//
+//
+//                authorQuotesItemArrayList.add(authorQuotesItem);
+//
+//                quotesArray.add(authorQuotesItem.getQuote());
+//
+//            }
+//
+//
+//            authorsItem.setAuthorQuotesItemArrayList(authorQuotesItemArrayList);
+//
+//            authorsItemArray.add(authorsItem);
+//
+//            quotesItem.setAuthorsItems(authorsItemArray);
+//
+//            initViews(author);
+//
+//        }
+//
+//
+//    }
 
 
     @Override
@@ -334,52 +395,52 @@ public class AuthorQuotesActivity extends AppCompatActivity implements AppBarLay
     }
 
 
-    private void initViews(String author) {
-
-
-        Picasso.with(context).load(author_image_url).into(circleImageView);
-
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.card_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-
-        RecyclerView.Adapter adapter = new AuthorQuotesDataAdapter(quotesArray, author, getApplicationContext());
-        recyclerView.setAdapter(adapter);
-
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            GestureDetector gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
-
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-
-            });
-
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
-                View child = rv.findChildViewUnder(e.getX(), e.getY());
-                if (child != null && gestureDetector.onTouchEvent(e)) {
-                    int position = rv.getChildAdapterPosition(child);
-                    Toast.makeText(getApplicationContext(), quotesArray.get(position), Toast.LENGTH_SHORT).show();
-                }
-
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
-    }
+//    private void initViews(String author) {
+//
+//
+//        Picasso.with(context).load(author_image_url).into(circleImageView);
+//
+//
+//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.card_recycler_view);
+//        recyclerView.setHasFixedSize(true);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//        recyclerView.setLayoutManager(layoutManager);
+//
+//
+//        RecyclerView.Adapter adapter = new AuthorQuotesDataAdapter(quotesArray, author, getApplicationContext());
+//        recyclerView.setAdapter(adapter);
+//
+//        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+//            GestureDetector gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
+//
+//                @Override
+//                public boolean onSingleTapUp(MotionEvent e) {
+//                    return true;
+//                }
+//
+//            });
+//
+//            @Override
+//            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+//
+//                View child = rv.findChildViewUnder(e.getX(), e.getY());
+//                if (child != null && gestureDetector.onTouchEvent(e)) {
+//                    int position = rv.getChildAdapterPosition(child);
+//                    Toast.makeText(getApplicationContext(), quotesArray.get(position), Toast.LENGTH_SHORT).show();
+//                }
+//
+//                return false;
+//            }
+//
+//            @Override
+//            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+//
+//            }
+//
+//            @Override
+//            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+//
+//            }
+//        });
+//    }
 }
